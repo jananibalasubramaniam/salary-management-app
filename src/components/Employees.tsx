@@ -18,6 +18,7 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Edit from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import EmployeeDetail from './EmployeeDetail';
+import DeleteEmployee from './DeleteEmployee';
 
 const columns : Array<{
         id: OrderByType,
@@ -136,12 +137,16 @@ const Employees  = () => {
     const [searchMinVal, setSearchMinVal] = useState<number | string>(minSalary);
     const [searchMaxVal, setSearchMaxVal] = useState<number | string>(maxSalary);
     const [searchResults, setSearchResults] = useState<Array<Employee>>(employees);
-    const [openDetail, setOpenDetail] = useState(false);
+    const [openDetail, setOpenDetail] = useState<boolean>(false);
+    const [employeeDetail, setEmployeeDetail] = useState<Employee>({} as Employee);
+    const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
 
     useEffect(() => {
         // https://nphc-hr.free.beeceptor.com/employees - exceeded the rate limit
        axios.get('http://localhost:3002/employees')
         .then(response =>  {
+            console.log(`Fetched employee list ${response.data}`);
             setEmployees(response.data);
             setSearchResults(response.data);
             const salaries = response?.data?.map((emp: Employee) => emp.salary);
@@ -153,7 +158,7 @@ const Employees  = () => {
             setSearchMinVal(minSal);
         })
         .catch(error => console.error(error)); //error, setError and use error && in template
-    }, [page]);
+    }, [page, refreshFlag]);
 
     useEffect(() => {
         const searchResults = searchEmployees();
@@ -162,7 +167,6 @@ const Employees  = () => {
 
     const handleRequestSort = (event: React.MouseEvent<HTMLSpanElement> | null, property: OrderByType) => {
         const isAsc = orderBy === property && order === 'asc';
-        console.log('handleSortReq', isAsc);
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
@@ -182,10 +186,25 @@ const Employees  = () => {
           
     const openEmployeeDetail = (employee: Employee) => {
         console.log(employee);
+        setEmployeeDetail(employee);
+        setOpenDetail(true);
+    }
+
+    const closeEmployeeDetail = () => {
+        setOpenDetail(false);
+    }
+
+    const refreshEmployeeList = () => {
+        const negateFlag = !refreshFlag;
+        setRefreshFlag(negateFlag);
     }
 
     const deleteEmployee = (employee: Employee) => {
-        console.log('delete ' , employee);
+        setOpenDeleteDialog(true);
+    }
+
+    const closeDeleteDialog = () => {
+        setOpenDeleteDialog(false);
     }
 
     const descendingComparator = <T, >(a: T, b: T, orderBy: keyof T) => {
@@ -208,14 +227,12 @@ const Employees  = () => {
     }
 
     const stableSort = <T, >(array: T[], comparator: (a: T, b: T) => number) => {
-        console.log('stable sort ', array);
         const stabilizedThis = array?.map((el, index) => [el, index] as [T, number]);
         stabilizedThis?.sort((a, b) => {
           const order = comparator(a[0], b[0]);
           if (order !== 0) return order;
           return a[1] - b[1];
         });
-        // console.log('stabilizedthis ', stabilizedThis.map((el) => el[0]));
         return stabilizedThis?.map((el) => el[0]);
       }
     
@@ -256,10 +273,10 @@ const Employees  = () => {
                         <TextField 
                             type='number'
                             InputProps={{inputProps: {min: searchMinVal , max: searchMaxVal}}} 
-                            value={searchMinVal || null} 
+                            value={searchMinVal} 
                             onChange={handleMinValChange} 
                             label='Minimum salary' 
-                            placeholder="Enter amount" 
+                            placeholder='Enter amount' 
                         />
                     </Grid>
                 </Grid> 
@@ -267,10 +284,10 @@ const Employees  = () => {
                     <TextField 
                         type='number' 
                         InputProps={{inputProps: {min:searchMinVal, max: searchMaxVal}}} 
-                        value={searchMaxVal || null} 
+                        value={searchMaxVal} 
                         onChange={handleMaxValChange} 
                         label='Maximum salary' 
-                        placeholder="Enter amount" 
+                        placeholder='Enter amount' 
                     />
                 </Grid>
             </div>
@@ -305,7 +322,7 @@ const Employees  = () => {
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((employee: any, index: number) => {
                             return (
-                                <TableRow style={{cursor: 'pointer'}} key={index} onClick={() => openEmployeeDetail(employee)}>
+                                <TableRow style={{cursor: 'pointer'}} key={index}>
                                     <TableCell>{employee.id}</TableCell>
                                     <TableCell>{employee.fullName}</TableCell>
                                     <TableCell>{employee.username}</TableCell>
@@ -323,13 +340,14 @@ const Employees  = () => {
                         })}
                     </TableBody>
                 </Table>
-                <EmployeeDetail />
+                <EmployeeDetail openDetail={openDetail} closeView={closeEmployeeDetail} employee={employeeDetail} employeeUpdated={refreshEmployeeList}/>
+                <DeleteEmployee openDialog={openDeleteDialog} closeDialog={closeDeleteDialog} employee={employeeDetail}  employeeDeleted={refreshEmployeeList}/>
             </TableContainer>
             <TablePagination
                 rowsPerPageOptions={[5, 10, 15]}
                 component='div'
                 count={searchResults.length}
-                rowsPerPage={rowsPerPage}
+                rowsPerPage={rowsPerPage} 
                 page={page}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
