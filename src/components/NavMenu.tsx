@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
         fontSize: '18px',
         backgroundColor: '#959595',
         width: '20%',
-        height: '100vh',
+        height: '105vh',
         color: '#fff',
         float: 'left',
 
@@ -38,6 +38,12 @@ const useStyles = makeStyles(() => ({
         '&:hover': {
             backgroundColor: '#555',
             color: '#fff'
+        },
+
+        '@media only screen and (max-width: 768px)': {
+            textAlign: 'right',
+            paddingright: '15px',
+            fontSize: '16px'
         }
     },
     userinfo: {
@@ -54,11 +60,11 @@ const useStyles = makeStyles(() => ({
         padding: '10px',
 
         '@media only screen and (max-width: 768px)': {
-            width: '20px',
-            height: '20px',
-            padding: '5px',
-            margin: '2% 0 0 5%',
-            float: 'left'
+            float: 'left',
+            width: '25px',
+            height: '25px',
+            margin: '3% 0 0 5%',
+            padding: '5px'
         }
     },
     username: {
@@ -102,7 +108,7 @@ const NavMenu = () => {
                         <PublishIcon/>
                         <span> UPLOAD </span> 
                     </li>
-                    <li className={classes.navlist}> 
+                    <li hidden className={classes.navlist}> 
                         <InfoIcon/>    
                         <span> ABOUT </span>
                     </li>
