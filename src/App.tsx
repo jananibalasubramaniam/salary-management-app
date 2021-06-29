@@ -1,9 +1,11 @@
-import React from 'react';
+import NavMenu from './components/NavMenu';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
     <div>
-      Salary management App
+      <NavMenu />
+      <Dashboard />
     </div>
   );
 }
