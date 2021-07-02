@@ -322,7 +322,7 @@ const Employees  = () => {
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((employee: any, index: number) => {
                             return (
-                                <TableRow style={{cursor: 'pointer'}} key={index}>
+                                <TableRow key={index}>
                                     <TableCell>{employee.id}</TableCell>
                                     <TableCell>{employee.fullName}</TableCell>
                                     <TableCell>{employee.username}</TableCell>

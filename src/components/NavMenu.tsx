@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 import PublishIcon from '@material-ui/icons/Publish';
 import InfoIcon from '@material-ui/icons/Info';
+import UploadEmployees from './UploadEmployees';
 
 const useStyles = makeStyles(() => ({
     navcontainer: {
@@ -95,6 +96,16 @@ const useStyles = makeStyles(() => ({
 
 const NavMenu = () => {
     const classes = useStyles();
+    const [openUpload, setOpenUpload] = useState<boolean>(false);
+
+    const openUploadEmployees = () => {
+        setOpenUpload(true);
+    }
+
+    const closeUploadEmployees = () => {
+        setOpenUpload(false);
+    }
+
     // use dehaze icon or list icon /menu and menuopen toggle
     return (
         <Fragment>
@@ -104,7 +115,7 @@ const NavMenu = () => {
                     <p className={classes.username}>HR Admin User</p>
                 </div>
                 <ul className={classes.unorderedlist}>
-                    <li className={classes.navlist}> 
+                    <li className={classes.navlist} onClick={openUploadEmployees}> 
                         <PublishIcon/>
                         <span> UPLOAD </span> 
                     </li>
@@ -119,6 +130,7 @@ const NavMenu = () => {
                 <span className={classes.bar}></span>
                 <span className={classes.bar}></span>
             </div>
+            <UploadEmployees openUpload={openUpload} closeView={closeUploadEmployees} />
         </Fragment>
     )
 }
