@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import AppSpinner from './Spinner';
-import { StatusMessage } from '../shared/interfaces/statusmessage.interface';
+import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
 import StatusMessageDialog from './StatusMessage';
 
 const useStyles = makeStyles((theme) => ({

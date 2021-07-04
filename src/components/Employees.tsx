@@ -20,7 +20,7 @@ import Button from '@material-ui/core/Button';
 import EmployeeDetail from './EmployeeDetail';
 import DeleteEmployee from './DeleteEmployee';
 import AppSpinner from './Spinner';
-import { StatusMessage } from '../shared/interfaces/statusmessage.interface';
+import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
 import StatusMessageDialog from './StatusMessage';
 
 const columns : Array<{

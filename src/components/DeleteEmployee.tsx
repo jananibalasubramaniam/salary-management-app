@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { Employee } from '../shared/interfaces/employee.interface';
 import AppSpinner from './Spinner';
-import { StatusMessage } from '../shared/interfaces/statusmessage.interface';
+import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
 import StatusMessageDialog from './StatusMessage';
 
 const useStyles = makeStyles(() => ({
