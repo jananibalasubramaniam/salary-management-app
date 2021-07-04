@@ -1,11 +1,11 @@
 import NavMenu from './components/NavMenu';
-import Dashboard from './components/Dashboard';
+import Employees from './components/Employees';
 
 function App() {
   return (
     <div>
       <NavMenu />
-      <Dashboard />
+      <Employees />
     </div>
   );
 }
