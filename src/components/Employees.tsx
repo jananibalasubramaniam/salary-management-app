@@ -19,6 +19,9 @@ import Edit from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import EmployeeDetail from './EmployeeDetail';
 import DeleteEmployee from './DeleteEmployee';
+import AppSpinner from './Spinner';
+import { StatusMessage } from '../shared/interfaces/statusmessage.interface';
+import StatusMessageDialog from './StatusMessage';
 
 const columns : Array<{
         id: OrderByType,
@@ -141,29 +144,66 @@ const Employees  = () => {
     const [employeeDetail, setEmployeeDetail] = useState<Employee>({} as Employee);
     const [refreshFlag, setRefreshFlag] = useState<boolean>(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [showStatusMessage, setShowStatusMessage ] = useState<boolean>(false);
+    const [statusMessage, setStatusMessage ] = useState<StatusMessage>({} as StatusMessage);
 
     useEffect(() => {
-        // https://nphc-hr.free.beeceptor.com/employees - exceeded the rate limit
-       axios.get('http://localhost:3002/employees')
-        .then(response =>  {
-            console.log(`Fetched employee list ${response.data}`);
-            setEmployees(response.data);
-            setSearchResults(response.data);
-            const salaries = response?.data?.map((emp: Employee) => emp.salary);
-            const maxSal = Math.max.apply(Math, salaries);
-            const minSal = Math.min.apply(Math, salaries);
-            setMaxSalary(maxSal);
-            setMinSalary(minSal);
-            setSearchMaxVal(maxSal);
-            setSearchMinVal(minSal);
-        })
-        .catch(error => console.error(error)); //error, setError and use error && in template
+        
+        // https://nphc-hr.free.beeceptor.com/employees - there is a rate limit set
+        // persist in localStorage
+        const cachedResponse = localStorage.getItem('cachecEmployees');
+
+        if(cachedResponse) {
+            console.log('Reading employees from cached response');
+            const parsedData = JSON.parse(cachedResponse);
+            setEmployees(parsedData);
+            setSearchResults(parsedData);
+            setMaxMinSalaries(parsedData);
+        } else {
+            setShowSpinner(true);
+            axios.get('http://localhost:3002/employees')
+            .then(response =>  {
+                console.log('Retrieved employee details ', response.data);
+                localStorage.setItem('cachedEmployees', JSON.stringify(response.data));
+                setShowSpinner(false);
+                setEmployees(response.data);
+                setSearchResults(response.data);
+                setMaxMinSalaries(response.data)
+                // const salaries = response?.data?.map((emp: Employee) => emp.salary);
+                // const maxSal = Math.max.apply(Math, salaries);
+                // const minSal = Math.min.apply(Math, salaries);
+                // setMaxSalary(maxSal);
+                // setMinSalary(minSal);
+                // setSearchMaxVal(maxSal);
+                // setSearchMinVal(minSal);
+            })
+            .catch(error => {
+                console.error(error);
+                setShowSpinner(false);
+                setStatusMessage({
+                    title: 'Error',
+                    message: 'Sorry, Could not retrieve employee details. Please try again later.'
+                });
+                setShowStatusMessage(true);
+            });
+        }
     }, [page, refreshFlag]);
 
     useEffect(() => {
         const searchResults = searchEmployees();
         setSearchResults(searchResults as Employee[]);
     }, [searchMinVal, searchMaxVal]);
+
+    const setMaxMinSalaries = (employees: Employee[]) => {
+        const salaries = employees.map((emp: Employee) => emp.salary);
+        const maxSal = Math.max.apply(Math, salaries);
+        const minSal = Math.min.apply(Math, salaries);
+        setMaxSalary(maxSal);
+        setMinSalary(minSal);
+        setSearchMaxVal(maxSal);
+        setSearchMinVal(minSal);
+    }
 
     const handleRequestSort = (event: React.MouseEvent<HTMLSpanElement> | null, property: OrderByType) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -185,7 +225,6 @@ const Employees  = () => {
     }
           
     const openEmployeeDetail = (employee: Employee) => {
-        console.log(employee);
         setEmployeeDetail(employee);
         setOpenDetail(true);
     }
@@ -195,6 +234,8 @@ const Employees  = () => {
     }
 
     const refreshEmployeeList = () => {
+        //invalidate cached response
+        localStorage.removeItem('cachedEmployees');
         const negateFlag = !refreshFlag;
         setRefreshFlag(negateFlag);
     }
@@ -263,96 +304,100 @@ const Employees  = () => {
     }
 
     return (
-        <Paper className={classes.root}>
-            <div className={classes.searchboxcontainer}>
-                <Grid container alignItems='flex-end'>
-                    <Grid item>
-                        <SearchIcon />
-                    </Grid>
+        <div>
+            <Paper className={classes.root}>
+                <div className={classes.searchboxcontainer}>
+                    <Grid container alignItems='flex-end'>
+                        <Grid item>
+                            <SearchIcon />
+                        </Grid>
+                        <Grid item>
+                            <TextField 
+                                type='number'
+                                InputProps={{inputProps: {min: searchMinVal , max: searchMaxVal}}} 
+                                value={searchMinVal} 
+                                onChange={handleMinValChange} 
+                                label='Minimum salary' 
+                                placeholder='Enter amount' 
+                            />
+                        </Grid>
+                    </Grid> 
                     <Grid item>
                         <TextField 
-                            type='number'
-                            InputProps={{inputProps: {min: searchMinVal , max: searchMaxVal}}} 
-                            value={searchMinVal} 
-                            onChange={handleMinValChange} 
-                            label='Minimum salary' 
+                            type='number' 
+                            InputProps={{inputProps: {min:searchMinVal, max: searchMaxVal}}} 
+                            value={searchMaxVal} 
+                            onChange={handleMaxValChange} 
+                            label='Maximum salary' 
                             placeholder='Enter amount' 
                         />
                     </Grid>
-                </Grid> 
-                <Grid item>
-                    <TextField 
-                        type='number' 
-                        InputProps={{inputProps: {min:searchMinVal, max: searchMaxVal}}} 
-                        value={searchMaxVal} 
-                        onChange={handleMaxValChange} 
-                        label='Maximum salary' 
-                        placeholder='Enter amount' 
-                    />
-                </Grid>
-            </div>
-            <h2 style={{paddingLeft: '15px'}}> Employees </h2>
-            <TableContainer>
-                <Table stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            {columns.map(column => (
-                                <TableCell className={classes.tablehead}
-                                    key={column.id}
-                                    style={{minWidth: column.minWidth}}
-                                    sortDirection={orderBy === column.id ? order : false}>
-                                        <TableSortLabel
-                                            active={orderBy === column.id}
-                                            direction={orderBy === column.id ? order : 'asc'}
-                                            onClick={(event) => createSortHandler(event, column.id)}>
-                                                {column.label}
-                                            {orderBy === column.id ? (
-                                              <span className={classes.visuallyHidden}>
-                                                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                              </span>
-                                            ) : null}
-                                        </TableSortLabel>
-                                </TableCell>
-                            ))}
-                                <TableCell key='action'> Action </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {stableSort(searchResults, getComparator(order, orderBy))
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((employee: any, index: number) => {
-                            return (
-                                <TableRow key={index}>
-                                    <TableCell>{employee.id}</TableCell>
-                                    <TableCell>{employee.fullName}</TableCell>
-                                    <TableCell>{employee.username}</TableCell>
-                                    <TableCell>S$ {employee.salary}</TableCell>
-                                    <TableCell align='left'>
-                                        <Button className={classes.alignediticon} aria-label='edit' onClick={() => openEmployeeDetail(employee)}>
-                                            <Edit />
-                                        </Button>
-                                        <Button className={classes.aligndeleteicon} aria-label='edit' onClick={() => deleteEmployee(employee)}>
-                                            <DeleteOutline />
-                                        </Button>
-                                    </TableCell> 
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>
-                </Table>
-                <EmployeeDetail openDetail={openDetail} closeView={closeEmployeeDetail} employee={employeeDetail} employeeUpdated={refreshEmployeeList}/>
-                <DeleteEmployee openDialog={openDeleteDialog} closeDialog={closeDeleteDialog} employee={employeeDetail}  employeeDeleted={refreshEmployeeList}/>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component='div'
-                count={searchResults.length}
-                rowsPerPage={rowsPerPage} 
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-        </Paper> 
+                </div>
+                <h2 style={{paddingLeft: '15px'}}> Employees </h2>
+                <TableContainer>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                {columns.map(column => (
+                                    <TableCell className={classes.tablehead}
+                                        key={column.id}
+                                        style={{minWidth: column.minWidth}}
+                                        sortDirection={orderBy === column.id ? order : false}>
+                                            <TableSortLabel
+                                                active={orderBy === column.id}
+                                                direction={orderBy === column.id ? order : 'asc'}
+                                                onClick={(event) => createSortHandler(event, column.id)}>
+                                                    {column.label}
+                                                {orderBy === column.id ? (
+                                                  <span className={classes.visuallyHidden}>
+                                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                                  </span>
+                                                ) : null}
+                                            </TableSortLabel>
+                                    </TableCell>
+                                ))}
+                                    <TableCell key='action'> Action </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {stableSort(searchResults, getComparator(order, orderBy))
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((employee: any, index: number) => {
+                                return (
+                                    <TableRow key={index}>
+                                        <TableCell>{employee.id}</TableCell>
+                                        <TableCell>{employee.fullName}</TableCell>
+                                        <TableCell>{employee.username}</TableCell>
+                                        <TableCell>S$ {employee.salary}</TableCell>
+                                        <TableCell align='left'>
+                                            <Button className={classes.alignediticon} aria-label='edit' onClick={() => openEmployeeDetail(employee)}>
+                                                <Edit />
+                                            </Button>
+                                            <Button className={classes.aligndeleteicon} aria-label='edit' onClick={() => deleteEmployee(employee)}>
+                                                <DeleteOutline />
+                                            </Button>
+                                        </TableCell> 
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
+                    <EmployeeDetail openDetail={openDetail} closeView={closeEmployeeDetail} employee={employeeDetail} employeeUpdated={refreshEmployeeList}/>
+                    <DeleteEmployee openDialog={openDeleteDialog} closeDialog={closeDeleteDialog} employee={employeeDetail}  employeeDeleted={refreshEmployeeList}/>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 15]}
+                    component='div'
+                    count={searchResults.length}
+                    rowsPerPage={rowsPerPage} 
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </Paper>
+            <AppSpinner showSpinner={showSpinner}/>
+            <StatusMessageDialog openDialog={showStatusMessage} status={statusMessage} />
+        </div>
     );
 }
 

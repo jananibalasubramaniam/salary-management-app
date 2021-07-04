@@ -7,6 +7,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { Employee } from '../shared/interfaces/employee.interface';
+import AppSpinner from './Spinner';
+import { StatusMessage } from '../shared/interfaces/statusmessage.interface';
+import StatusMessageDialog from './StatusMessage';
 
 const useStyles = makeStyles(() => ({
     buttonStyle: {
@@ -36,7 +39,9 @@ const DeleteEmployee: FC<{
     const [open, setOpen] = useState<boolean>(openDialog);
     const [deleteEmployee, setDeleteEmployee] = useState<boolean>(false);
     const [empName, setEmpName] = useState<string>('');
-    const [empId, setEmpId] = useState<string>('');
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [showStatusMessage, setShowStatusMessage] = useState<boolean>(false);
+    const [statusMessage, setStatusMessage] = useState<StatusMessage>({} as StatusMessage);
 
     const handleClose = () => {
         setDeleteEmployee(false);
@@ -50,18 +55,32 @@ const DeleteEmployee: FC<{
     useEffect(() => {
         setOpen(openDialog);
         setEmpName(employee.fullName);
-        setEmpId(employee.id);
     }, [openDialog]);
 
     useEffect(() => {
         if(deleteEmployee) {
+            setShowSpinner(true);
             axios.delete(`https://nphc-hr.free.beeceptor.com/employees/${employee.id}`)
                 .then(res => {
+                    setShowSpinner(false);
                     console.log(`Successfully deleted the employee record ${res.data}`);
                     employeeDeleted();
                     handleClose();
+                    setStatusMessage({
+                        title: 'Success',
+                        message: 'Employee deleted successfully.'
+                    })
+                    setShowStatusMessage(true);
                 })
-                .catch(err => console.log(err.response.data)); //setError to display error view
+                .catch(err => {
+                    setShowSpinner(false);
+                    console.error('Error deleting Employee', err.response.data);
+                    setStatusMessage({
+                        title: 'Error',
+                        message: 'Sorry, Employee could not be deleted. Please try again later.'
+                    })
+                    setShowStatusMessage(true);
+                });
         }
     }, [deleteEmployee]);
 
@@ -70,8 +89,6 @@ const DeleteEmployee: FC<{
             <Dialog
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
                 disableBackdropClick
                 disableEscapeKeyDown
             >
@@ -89,6 +106,8 @@ const DeleteEmployee: FC<{
                     </Button>
                 </DialogActions>
             </Dialog>
+            <AppSpinner showSpinner={showSpinner}/>
+            <StatusMessageDialog openDialog={showStatusMessage} status={statusMessage} />
         </div>
     );
 }

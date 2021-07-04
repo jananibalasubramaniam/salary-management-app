@@ -7,6 +7,9 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
+import AppSpinner from './Spinner';
+import { StatusMessage } from '../shared/interfaces/statusmessage.interface';
+import StatusMessageDialog from './StatusMessage';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -84,6 +87,9 @@ const EmployeeDetail : FC<{
     const [ salaryError, setSalaryError ] = useState<boolean>(false);
     const [ salaryHelperText, setSalaryHelperText ] = useState<string>('');
     const [ employeeDetails, setEmployeeDetails ] = useState<Employee>({} as Employee);
+    const [ showSpinner, setShowSpinner ] = useState<boolean>(false);
+    const [ showStatusMessage, setShowStatusMessage ] = useState<boolean>(false);
+    const [ statusMessage, setStatusMessage ] = useState<StatusMessage>({} as StatusMessage);
 
     useEffect(() => {
         setOpen(openDetail);
@@ -94,13 +100,29 @@ const EmployeeDetail : FC<{
 
     useEffect(() => {
         if(employeeDetails.id && employeeDetails.fullName && employeeDetails.username && employeeDetails.salary) {
+            setShowSpinner(true);
             axios.put(`https://nphc-hr.free.beeceptor.com/employees/${employee.id}`, employeeDetails)
             .then(res => {
                console.log('UPDATE successful!', res?.data);
+               setShowSpinner(false);
                employeeUpdated(); //inform parent to update
                closeDetail();
+               setStatusMessage({
+                   title: 'Success',
+                   message: 'Employee details updated!'
+               });
+               setShowStatusMessage(true);
             })
-            .catch(err => console.log(err.response.data)); //setError to display error view
+            .catch(err => {
+                console.error('error updating employees ', err);
+                setShowSpinner(false);
+                setStatusMessage({
+                    status: err.response.status,
+                    title: 'Error',
+                    message: 'Sorry! There was an error updating employee detail. Please try again later'
+                })
+                setShowStatusMessage(true);
+            });
         }
     }, [employeeDetails]);
 
@@ -108,6 +130,7 @@ const EmployeeDetail : FC<{
         setFullName('');
         setUserName('');
         setSalary(1);
+        setStatusMessage({} as StatusMessage)
         closeView();
         setOpen(false);
     };
@@ -222,6 +245,8 @@ const EmployeeDetail : FC<{
                     </div>
                 </Fade>
             </Modal>
+            <AppSpinner showSpinner={showSpinner} />
+            <StatusMessageDialog openDialog={showStatusMessage} status={statusMessage}/>
         </div>
     )
 };

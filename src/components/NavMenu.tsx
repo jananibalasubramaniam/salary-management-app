@@ -4,6 +4,9 @@ import PersonIcon from '@material-ui/icons/Person';
 import PublishIcon from '@material-ui/icons/Publish';
 import InfoIcon from '@material-ui/icons/Info';
 import UploadEmployees from './UploadEmployees';
+import MenuIcon from '@material-ui/icons/Menu';
+import CloseIcon from '@material-ui/icons/Close';
+import { NONAME } from 'dns';
 
 const useStyles = makeStyles(() => ({
     navcontainer: {
@@ -16,7 +19,7 @@ const useStyles = makeStyles(() => ({
 
         '@media only screen and (max-width: 768px)': {
             width: '100vw',
-            height: 'auto'
+            maxHeight: '7vh'
         }
     },
     unorderedlist: {
@@ -27,7 +30,24 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'column',
     
         '@media only screen and (max-width: 768px)': {
-            flexDirection: 'row'
+            display: 'none'
+        }
+    },
+    unorderedlistopen: {
+        '@media only screen and (max-width: 768px)': {
+            display: 'inline-block',
+            position: 'fixed',
+            top: '45px',
+            left: 0,
+            width: '100%',
+            backgroundColor: '#f5f5f5',
+            color: '#000',
+            zIndex: 2,
+
+            '&:active': {
+                backgroundColor: '#555',
+                color: '#fff'
+            }
         }
     },
     navlist: {
@@ -42,9 +62,10 @@ const useStyles = makeStyles(() => ({
         },
 
         '@media only screen and (max-width: 768px)': {
-            textAlign: 'right',
+            textAlign: 'left',
             paddingright: '15px',
-            fontSize: '16px'
+            fontSize: '16px',
+            width: '100%'
         }
     },
     userinfo: {
@@ -64,7 +85,7 @@ const useStyles = makeStyles(() => ({
             float: 'left',
             width: '25px',
             height: '25px',
-            margin: '3% 0 0 5%',
+            margin: '4% 0 1% 3%',
             padding: '5px'
         }
     },
@@ -80,7 +101,10 @@ const useStyles = makeStyles(() => ({
 
         '@media only screen and (max-width: 768px)': {
             display: 'block',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            position: 'fixed',
+            top: '10px',
+            right: '10px'
         }
     },
     bar: {
@@ -90,13 +114,18 @@ const useStyles = makeStyles(() => ({
         margin: '5px auto',
         webkitTransition: 'all 0.3s ease-in-out',
         transition: 'all 0.3s ease-in-out',
-        backgroundColor: '#555'
+        backgroundColor: 'black'
+    },
+    iconstyle: {
+        verticalAlign: 'top',
+        height: '20px'
     }
 }));
 
 const NavMenu = () => {
     const classes = useStyles();
     const [openUpload, setOpenUpload] = useState<boolean>(false);
+    const [openMenu, setOpenMenu] = useState<boolean>(false);
 
     const openUploadEmployees = () => {
         setOpenUpload(true);
@@ -106,7 +135,10 @@ const NavMenu = () => {
         setOpenUpload(false);
     }
 
-    // use dehaze icon or list icon /menu and menuopen toggle
+    const openHamburgerMenu = () => {
+        setOpenMenu(!openMenu);
+    }
+
     return (
         <Fragment>
             <nav className={classes.navcontainer}>
@@ -114,22 +146,23 @@ const NavMenu = () => {
                     <PersonIcon className={classes.usericon}/>
                     <p className={classes.username}>HR Admin User</p>
                 </div>
-                <ul className={classes.unorderedlist}>
+                <div className={classes.hamburger} onClick={openHamburgerMenu}>
+                    {!openMenu && (
+                        <MenuIcon />
+                    )}
+                    {openMenu && (<CloseIcon />)}
+                </div>
+                <ul className={`${classes.unorderedlist} ${openMenu ? classes.unorderedlistopen:''}`}>
                     <li className={classes.navlist} onClick={openUploadEmployees}> 
-                        <PublishIcon/>
+                        <PublishIcon className={classes.iconstyle} />
                         <span> UPLOAD </span> 
                     </li>
-                    <li hidden className={classes.navlist}> 
-                        <InfoIcon/>    
+                    <li  className={classes.navlist}> 
+                        <InfoIcon className={classes.iconstyle} />    
                         <span> ABOUT </span>
                     </li>
                 </ul>
             </nav>
-            <div className={classes.hamburger}>
-                <span className={classes.bar}></span>
-                <span className={classes.bar}></span>
-                <span className={classes.bar}></span>
-            </div>
             <UploadEmployees openUpload={openUpload} closeView={closeUploadEmployees} />
         </Fragment>
     )
