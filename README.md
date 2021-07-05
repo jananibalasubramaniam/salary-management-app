@@ -3,7 +3,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 - The app is responsive; built on a single route, all API endpoints point to BASE_URL : https://nphc-hr.free.beeceptor.com/employees
-- Rate-limited responses have been persisted on localStorage
+- Rate-limited APIs have been cached & persisted on localStorage
 - The shared folder currently only holds interface definitions, but has been designed this way for future /services or /contexts
 - DragDrop component uses the out-of-box react library : react-dropzone. Please refer to issues reported on the library if you encounter one, before it could be added to the issues on this app.
 - Components like tables, modals, backdrop, buttons and icons have been imported from material-ui for react, to stay consistent with design across app.
