@@ -115,10 +115,22 @@ const UploadEmployees :FC<{
                             <div>
                                 <DragDrop clearState={clearState} uploadFiles={uploadEmployees} uploadComplete={updateUploadEmployees}/>
                             </div>
-                            <Button hidden variant='contained' className={classes.buttonStyle} disableElevation onClick={handleUploadEmployees}>
+                            <Button 
+                                id='upload-employees'
+                                variant='contained' 
+                                className={classes.buttonStyle} 
+                                disableElevation 
+                                onClick={handleUploadEmployees}
+                            >
                                 UPLOAD
                             </Button>
-                            <Button variant='contained' className={classes.buttonStyle} disableElevation onClick={() => closeUpload()}>
+                            <Button
+                                id='upload-close'
+                                variant='contained' 
+                                className={classes.buttonStyle} 
+                                disableElevation 
+                                onClick={() => closeUpload()}
+                            >
                                 CLOSE
                             </Button>
                         </form>

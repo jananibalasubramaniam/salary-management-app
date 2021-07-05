@@ -17,13 +17,9 @@ describe('EmployeeDetail', () => {
     const setState = jest.fn();
     const useStateMock: any = (initState: any) => [initState, setState];
     const useStateSpy = jest.spyOn(React, 'useState');
-    // jest.mock('axios', () => {
-    //     return {
-    //         put: jest.fn()
-    //     }
-    // });
+    const useEffectSpy = jest.spyOn(React, 'useEffect');
+
     const mockedAxios = axios as jest.Mocked<AxiosMock>;
-    //const mockedAxios = axios as AxiosMock;
     const data = {
         config: {
             url: 'update-employee'
@@ -153,16 +149,22 @@ describe('EmployeeDetail', () => {
     });
 
     xit('calls the API to update employee details when update button is clicked', () => {
+        const mountedWrapper = mount(<EmployeeDetail {...props} />);
         let updateButton = wrapper.find('#submitupdate-button');
-        const axiosSpy = jest.spyOn(axios, 'put');
+        const axiosSpy = jest.spyOn(axios, 'put').mockResolvedValue({data: {data: {}}});
+        // const submitForm = jest.fn();
 
+        expect(updateButton.length).toEqual(1);
         updateButton.props().onClick();
         wrapper.update();
-        expect(axiosSpy).toHaveBeenCalledTimes(1);
+        expect(useEffectSpy).toHaveBeenCalled();
+        expect(wrapper.instance().submitForm).toHaveBeenCalled();
+        // expect(axiosSpy).toHaveBeenCalledTimes(1);
         expect(axios.put).toHaveBeenCalledWith('https://nphc-hr.free.beeceptor.com/employees/e0001');
     });
 
     xit('shows error status when API errors out', () => {
+        let updateButton = wrapper.find('#submitupdate-button');
         const setShowStatusMessage = jest.fn();
         const setShowSpinner = jest.fn();
         const setStatusMessage = jest.fn();
@@ -171,15 +173,12 @@ describe('EmployeeDetail', () => {
             title: 'Error',
             message: 'Sorry! There was an error updating employee detail. Please try again later'
         };
-
-        mockedAxios.put.mockRejectedValue({
-            status: 500,
-            data: {
-                message: 'Internal Server Error'
-            }
-        });
-
+        const axiosSpy = jest.spyOn(axios, 'put').mockRejectedValue(failedStatusMsg);
+        console.log('closebutton props ======> ', updateButton.props());
+        updateButton.props().onClick();
         wrapper.update();
+        expect(useEffectSpy).toHaveBeenCalled();
+        expect(axiosSpy).toHaveBeenCalledTimes(1);
         expect(setShowSpinner).toHaveBeenCalledTimes(1);
         expect(setShowStatusMessage).toHaveBeenCalledWith(true);
         expect(setStatusMessage).toHaveBeenCalledWith(failedStatusMsg);

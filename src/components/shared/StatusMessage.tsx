@@ -8,7 +8,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import { StatusMessage } from '../../shared/interfaces/statusMessage.interface';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-
 const useStyles = makeStyles(() => ({
     buttonStyle: {
         backgroundColor: '#555',
@@ -21,7 +20,6 @@ const useStyles = makeStyles(() => ({
         }
     }
 }));
-
 
 const StatusMessageDialog: FC<{
     openDialog: boolean;
@@ -54,7 +52,7 @@ const StatusMessageDialog: FC<{
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={handleClose} className={classes.buttonStyle} autoFocus>
+                <Button onClick={handleClose} className={classes.buttonStyle} autoFocus id='statusdialog-btn-ok'>
                     OK
                 </Button>
                 </DialogActions>
