@@ -17,7 +17,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Additional tests for components
 - Auto refresh employee list when use uploads excel(using the context system)
 - Better styles for the rows in the table
-
+- Adding coverage for tests
 ## Enhancements
 
 - [UI] Slide-in/out nav
@@ -27,11 +27,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Available Scripts
 ### `npm start`
 
-Runs the app in the development mode.\
+- Checkout the code from master
+- Run 'npm install' or 'yarn install' in the root
+- Run 'npm start' to run the app in development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Checkout the code from master
+- Run 'npm install' or 'yarn install' in the root
+- Run 'npm test'
+Launches the test runner in the interactive watch mode.
 
-### Link to Netlify/CodeSandbox : <Coming Soon>
+### Link to Netlify/CodeSandbox : 
+Coming Soon!
