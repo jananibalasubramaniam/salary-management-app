@@ -21,7 +21,7 @@ describe('StatusMessageDialog', () => {
         wrapper = shallow(<StatusMessageDialog {...props}/>);
     });
     
-    it('renders with props set as initial values', () => {
+    it('renders', () => {
         expect(wrapper).toBeTruthy();
     });
 

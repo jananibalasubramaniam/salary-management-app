@@ -129,7 +129,6 @@ describe('EmployeeDetail', () => {
         expect(useStateSpy).toHaveBeenCalled();
         wrapper.update();
         salaryElement = wrapper.find('#employeedetail-salary');
-        console.log('salary Element ', salaryElement.props());
         expect(salaryElement.props().value).toBe(750000);
     });
 
