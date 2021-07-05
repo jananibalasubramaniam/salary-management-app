@@ -6,7 +6,6 @@ import InfoIcon from '@material-ui/icons/Info';
 import UploadEmployees from './UploadEmployees';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
-import { NONAME } from 'dns';
 
 const useStyles = makeStyles(() => ({
     navcontainer: {
@@ -160,6 +159,7 @@ const NavMenu = () => {
                     <li  className={classes.navlist}> 
                         <InfoIcon className={classes.iconstyle} />    
                         <span> ABOUT </span>
+                        <span hidden> placeholder to open NPHC home </span>
                     </li>
                 </ul>
             </nav>

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import axios from 'axios';
 import AppSpinner from './Spinner';
-import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
+import { StatusMessage } from '../../shared/interfaces/statusMessage.interface';
 import StatusMessageDialog from './StatusMessage';
 interface DropFile {
     lastModified: number;

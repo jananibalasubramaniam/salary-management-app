@@ -19,9 +19,9 @@ import Edit from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 import EmployeeDetail from './EmployeeDetail';
 import DeleteEmployee from './DeleteEmployee';
-import AppSpinner from './Spinner';
+import AppSpinner from './shared/Spinner';
 import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
-import StatusMessageDialog from './StatusMessage';
+import StatusMessageDialog from './shared/StatusMessage';
 
 const columns : Array<{
         id: OrderByType,
@@ -149,8 +149,7 @@ const Employees  = () => {
     const [statusMessage, setStatusMessage ] = useState<StatusMessage>({} as StatusMessage);
 
     useEffect(() => {
-        
-        // https://nphc-hr.free.beeceptor.com/employees - there is a rate limit set
+        // https://nphc-hr.free.beeceptor.com/employees - rate limit is set
         // persist in localStorage
         const cachedResponse = localStorage.getItem('cachecEmployees');
 
@@ -170,13 +169,6 @@ const Employees  = () => {
                 setEmployees(response.data);
                 setSearchResults(response.data);
                 setMaxMinSalaries(response.data)
-                // const salaries = response?.data?.map((emp: Employee) => emp.salary);
-                // const maxSal = Math.max.apply(Math, salaries);
-                // const minSal = Math.min.apply(Math, salaries);
-                // setMaxSalary(maxSal);
-                // setMinSalary(minSal);
-                // setSearchMaxVal(maxSal);
-                // setSearchMinVal(minSal);
             })
             .catch(error => {
                 console.error(error);

@@ -7,9 +7,9 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
-import AppSpinner from './Spinner';
+import AppSpinner from './shared/Spinner';
 import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
-import StatusMessageDialog from './StatusMessage';
+import StatusMessageDialog from './shared/StatusMessage';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -76,7 +76,7 @@ const EmployeeDetail : FC<{
     employeeUpdated
 }) => {
     const classes = useStyles();
-    const [open, setOpen] = useState<boolean>(openDetail);
+    const [ open, setOpen ] = useState<boolean>(openDetail);
     const [ fullNameError, setFullNameError] = useState<boolean>(false);
     const [ fullName, setFullName ] =  useState<string>('');
     const [ fullNameHelperText, setFullNameHelperText ] = useState<string>('');
@@ -90,6 +90,7 @@ const EmployeeDetail : FC<{
     const [ showSpinner, setShowSpinner ] = useState<boolean>(false);
     const [ showStatusMessage, setShowStatusMessage ] = useState<boolean>(false);
     const [ statusMessage, setStatusMessage ] = useState<StatusMessage>({} as StatusMessage);
+    const [ updateButtonClicked, setUpdateButtonClicked ] = useState<boolean>(false);
 
     useEffect(() => {
         setOpen(openDetail);
@@ -99,7 +100,8 @@ const EmployeeDetail : FC<{
     }, [openDetail]);
 
     useEffect(() => {
-        if(employeeDetails.id && employeeDetails.fullName && employeeDetails.username && employeeDetails.salary) {
+        // if(employeeDetails.id && employeeDetails.fullName && employeeDetails.username && employeeDetails.salary) {
+        if(updateButtonClicked) {
             setShowSpinner(true);
             axios.put(`https://nphc-hr.free.beeceptor.com/employees/${employee.id}`, employeeDetails)
             .then(res => {
@@ -124,15 +126,16 @@ const EmployeeDetail : FC<{
                 setShowStatusMessage(true);
             });
         }
-    }, [employeeDetails]);
+    }, [updateButtonClicked]);
 
     const closeDetail = () => {
         setFullName('');
         setUserName('');
         setSalary(1);
         setStatusMessage({} as StatusMessage)
-        closeView();
         setOpen(false);
+        setUpdateButtonClicked(false);
+        closeView();
     };
 
     const handleFullNameChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -186,6 +189,7 @@ const EmployeeDetail : FC<{
             username: userName,
             salary : salary as number
         });
+        setUpdateButtonClicked(true);
     }
 
     return (
@@ -203,24 +207,27 @@ const EmployeeDetail : FC<{
                     <div className={classes.paper}>
                         <form className={classes.root} noValidate autoComplete='off'>
                         <TextField
-                          error={fullNameError}
-                          required
-                          label='Full Name'
-                          value={fullName}
-                          onChange={(event) => handleFullNameChange(event)}
-                          onBlur={(event) => handleFullNameChange(event)}
-                          helperText={fullNameHelperText}
+                            id='employeedetail-fullName'
+                            error={fullNameError}
+                            required
+                            label='Full Name'
+                            value={fullName}
+                            onChange={(event) => handleFullNameChange(event)}
+                            onBlur={(event) => handleFullNameChange(event)}
+                            helperText={fullNameHelperText}
                         />
                         <TextField
-                          error={userNameError}
-                          required
-                          label='User Name'
-                          value={userName}
-                          onChange={(event) => handleUserNameChange(event)}
-                          onBlur={(event) => handleUserNameChange(event)}
-                          helperText={userNameHelperText}
+                            id='employeedetail-userName'
+                            error={userNameError}
+                            required
+                            label='User Name'
+                            value={userName}
+                            onChange={(event) => handleUserNameChange(event)}
+                            onBlur={(event) => handleUserNameChange(event)}
+                            helperText={userNameHelperText}
                         />
                         <TextField 
+                            id='employeedetail-salary'
                             error={salaryError}
                             required
                             label='Salary (S$)' 
@@ -235,10 +242,22 @@ const EmployeeDetail : FC<{
                             onBlur={(event) => handleSalaryChange(event)}
                             helperText={salaryHelperText}
                         />
-                        <Button variant='contained' className={classes.buttonStyle} disableElevation onClick={submitForm}>
-                            SUBMIT
+                        <Button 
+                            id='submitupdate-button'
+                            variant='contained' 
+                            className={classes.buttonStyle} 
+                            disableElevation 
+                            onClick={submitForm}
+                        >
+                            UPDATE
                         </Button>
-                        <Button variant='contained' className={classes.buttonStyle} disableElevation onClick={closeDetail}>
+                        <Button 
+                            id='closedetail-button'
+                            variant='contained'
+                            className={classes.buttonStyle} 
+                            disableElevation 
+                            onClick={closeDetail}
+                        >
                             CLOSE
                         </Button>
                         </form>
