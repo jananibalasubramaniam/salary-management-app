@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount , shallow }  from 'enzyme';
-import AppSpinner from '../shared/Spinner/Spinner';
-import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
-import DeleteEmployee from './DeleteEmployee';
+import AppSpinner from '../components/shared/Spinner';
+import StatusMessageDialog from '../components/shared/StatusMessage';
+import DeleteEmployee from '../components/DeleteEmployee';
 
 describe('DeleteEmployee', () => {
     let wrapper: any;

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 import PublishIcon from '@material-ui/icons/Publish';
 import InfoIcon from '@material-ui/icons/Info';
-import UploadEmployees from '../BulkUploadEmployees/UploadEmployees';
+import UploadEmployees from './UploadEmployees';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow }  from 'enzyme';
-import './NavMenu';
-import NavMenu from './NavMenu';
-import UploadEmployees from '../BulkUploadEmployees/UploadEmployees';
+import '../components/NavMenu';
+import NavMenu from '../components/NavMenu';
+import UploadEmployees from '../components/UploadEmployees';
 import MenuIcon from '@material-ui/icons/Menu';
 
 describe('NavMenu', () =>{

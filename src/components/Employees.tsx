@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import { Employee, OrderByType, Order } from '../../shared/interfaces/employee.interface';
+import { Employee, OrderByType, Order } from '../shared/interfaces/employee.interface';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,11 +17,11 @@ import SearchIcon from '@material-ui/icons/Search';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Edit from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
-import EmployeeDetail from '../EditEmployeeDetails/EmployeeDetail';
-import DeleteEmployee from '../DeleteEmployee/DeleteEmployee';
-import AppSpinner from '../shared/Spinner/Spinner';
-import { StatusMessage } from '../../shared/interfaces/statusMessage.interface';
-import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
+import EmployeeDetail from './EmployeeDetail';
+import DeleteEmployee from './DeleteEmployee';
+import AppSpinner from './shared/Spinner';
+import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
+import StatusMessageDialog from './shared/StatusMessage';
 
 const columns : Array<{
         id: OrderByType,

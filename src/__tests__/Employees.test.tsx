@@ -1,12 +1,12 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import Employees from './Employees';
-import AppSpinner from '../shared/Spinner/Spinner';
-import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
-import EmployeeDetail from '../EditEmployeeDetails/EmployeeDetail';
+import Employees from '../components/Employees';
+import AppSpinner from '../components/shared/Spinner';
+import StatusMessageDialog from '../components/shared/StatusMessage';
+import EmployeeDetail from '../components/EmployeeDetail';
 import axios from 'axios';
 import renderer, { act } from 'react-dom/test-utils';
-import DeleteEmployee from '../DeleteEmployee/DeleteEmployee';
+import DeleteEmployee from '../components/DeleteEmployee';
 
 fdescribe(Employees, () => {
     let wrapper: any;

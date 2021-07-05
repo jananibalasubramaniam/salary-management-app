@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import AppSpinner from './Spinner';
+import AppSpinner from '../components/shared/Spinner';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 
 describe('AppSpinner ', () => {
