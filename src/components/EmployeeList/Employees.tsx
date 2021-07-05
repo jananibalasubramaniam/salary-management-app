@@ -353,8 +353,8 @@ const Employees  = () => {
                         </TableHead>
                         <TableBody>
                             {stableSort(searchResults, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((employee: any, index: number) => {
+                            ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            ?.map((employee: any, index: number) => {
                                 return (
                                     <TableRow key={index}>
                                         <TableCell>{employee.id}</TableCell>

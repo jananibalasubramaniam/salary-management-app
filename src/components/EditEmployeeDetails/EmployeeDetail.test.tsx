@@ -148,18 +148,17 @@ describe('EmployeeDetail', () => {
     });
 
     xit('calls the API to update employee details when update button is clicked', () => {
-        const mountedWrapper = mount(<EmployeeDetail {...props} />);
-        let updateButton = wrapper.find('#submitupdate-button');
+        let updateButton = wrapper.find('#submitupdate-button').first();
         const axiosSpy = jest.spyOn(axios, 'put').mockResolvedValue({data: {data: {}}});
-        // const submitForm = jest.fn();
+        const submitForm = jest.fn();
 
         expect(updateButton.length).toEqual(1);
         updateButton.props().onClick();
-        wrapper.update();
+        // wrapper.update();
         expect(useEffectSpy).toHaveBeenCalled();
-        expect(wrapper.instance().submitForm).toHaveBeenCalled();
+        expect(submitForm).toHaveBeenCalled();
         // expect(axiosSpy).toHaveBeenCalledTimes(1);
-        expect(axios.put).toHaveBeenCalledWith('https://nphc-hr.free.beeceptor.com/employees/e0001');
+        expect(axiosSpy).toHaveBeenCalledWith('https://nphc-hr.free.beeceptor.com/employees/e0001');
     });
 
     xit('shows error status when API errors out', () => {
