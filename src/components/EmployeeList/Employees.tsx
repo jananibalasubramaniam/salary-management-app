@@ -338,6 +338,7 @@ const Employees  = () => {
                                             <TableSortLabel
                                                 active={orderBy === column.id}
                                                 direction={orderBy === column.id ? order : 'asc'}
+                                                id={`table-sort-${column.id}`}
                                                 onClick={(event) => createSortHandler(event, column.id)}>
                                                     {column.label}
                                                 {orderBy === column.id ? (

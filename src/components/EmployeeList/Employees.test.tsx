@@ -6,6 +6,7 @@ import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
 import EmployeeDetail from '../EditEmployeeDetails/EmployeeDetail';
 import axios from 'axios';
 import renderer, { act } from 'react-dom/test-utils';
+import DeleteEmployee from '../DeleteEmployee/DeleteEmployee';
 
 fdescribe(Employees, () => {
     let wrapper: any;
@@ -37,12 +38,18 @@ fdescribe(Employees, () => {
         message: 'Internal Server Error'
     };
 
+    afterAll(() => {
+        jest.restoreAllMocks();
+        jest.resetAllMocks();
+    });
+
     it('renders self and children ', () => {
         wrapper = shallow(<Employees/>);
         expect(wrapper).toBeTruthy();
         expect(wrapper.find(AppSpinner).length).toBe(1);
         expect(wrapper.find(StatusMessageDialog).length).toBe(1);
         expect(wrapper.find(EmployeeDetail).length).toBe(1);
+        expect(wrapper.find(DeleteEmployee).length).toBe(1);
     });
 
     it('fetches employees from API and lists them', async() => {
@@ -72,10 +79,30 @@ fdescribe(Employees, () => {
         expect(useEffectSpy).toHaveBeenCalled();
         expect(axiosGetSpy).toHaveBeenCalled();
         expect(useStateSpy).toHaveBeenCalled();
-        expect(wrapper.find('tbody').children()).not.toHaveLength(3);
+        expect(wrapper.find('tbody').children()).toHaveLength(0);
         expect(wrapper.find(AppSpinner).first().props().showSpinner).toBe(false);
         expect(wrapper.find(StatusMessageDialog).last().props().openDialog).toBe(true);
         expect(wrapper.find(StatusMessageDialog).last().props().status.title).toBe('Error');
         expect(wrapper.find(StatusMessageDialog).last().props().status.message).toBe('Sorry, Could not retrieve employee details. Please try again later.');
+    });
+
+    it('retrieves data from localStorage if available', () => {
+
+    });
+
+    it('check if data sorts when sort icon is clicked', () => {
+
+    });
+
+    it('opens employee details when edit icon is clicked', () => {
+
+    });
+
+    it('opens delete dialog when delete icon is clicked', () => {
+
+    });
+
+    it('searches employee list when a salary range is given', () => {
+
     });
 });
