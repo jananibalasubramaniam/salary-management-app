@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import DragDrop from './DragDrop';
-import AppSpinner from '../shared/Spinner';
-import StatusMessageDialog from '../shared/StatusMessage';
+import AppSpinner from '../Spinner/Spinner';
+import StatusMessageDialog from '../StatusMessage/StatusMessage';
 
 describe('DragDrop', () => {
     let wrapper: any;

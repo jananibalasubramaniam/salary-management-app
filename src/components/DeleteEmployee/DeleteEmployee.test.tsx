@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount , shallow }  from 'enzyme';
-import AppSpinner from './shared/Spinner';
-import StatusMessageDialog from './shared/StatusMessage';
+import AppSpinner from '../shared/Spinner/Spinner';
+import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
 import DeleteEmployee from './DeleteEmployee';
 
 describe('DeleteEmployee', () => {

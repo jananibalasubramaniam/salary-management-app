@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Employees from './Employees';
-import AppSpinner from './shared/Spinner';
-import StatusMessageDialog from './shared/StatusMessage';
-import EmployeeDetail from './EmployeeDetail';
+import AppSpinner from '../shared/Spinner/Spinner';
+import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
+import EmployeeDetail from '../EditEmployeeDetails/EmployeeDetail';
 
 describe(Employees, () => {
     let wrapper: any;
@@ -19,5 +19,5 @@ describe(Employees, () => {
         expect(wrapper.find(AppSpinner).length).toBe(1);
         expect(wrapper.find(StatusMessageDialog).length).toBe(1);
         expect(wrapper.find(EmployeeDetail).length).toBe(1);
-    })
+    });
 });

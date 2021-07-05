@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount , shallow }  from 'enzyme';
 import EmployeeDetail from './EmployeeDetail';
-import AppSpinner from './shared/Spinner';
-import StatusMessageDialog from './shared/StatusMessage';
+import AppSpinner from '../shared/Spinner/Spinner';
+import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
 import { TextField } from '@material-ui/core';
 import { act } from 'react-dom/test-utils';
 import axios, { AxiosStatic } from 'axios';

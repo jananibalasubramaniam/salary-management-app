@@ -1,5 +1,5 @@
-import NavMenu from './components/NavMenu';
-import Employees from './components/Employees';
+import NavMenu from './components/NavMenu/NavMenu';
+import Employees from './components/EmployeeList/Employees';
 
 function App() {
   return (

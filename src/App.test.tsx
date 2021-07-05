@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import App from './App';
-import NavMenu from './components/NavMenu';
-import Employees from './components/Employees';
+import NavMenu from './components/NavMenu/NavMenu';
+import Employees from './components/EmployeeList/Employees';
 
 describe('App', () => {
   it('renders', () => {

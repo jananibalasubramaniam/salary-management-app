@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount , shallow }  from 'enzyme';
 import UploadEmployees from './UploadEmployees';
-import DragDrop from './shared/DragDrop';
+import DragDrop from '../shared/DragDrop/DragDrop';
 import { act } from 'react-dom/test-utils';
 
 describe('UploadEmployees', () => {

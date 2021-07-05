@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import StatusMessageDialog from './StatusMessage';
-import {StatusMessage} from '../../shared/interfaces/statusMessage.interface'
+import {StatusMessage} from '../../../shared/interfaces/statusMessage.interface'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
 

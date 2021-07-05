@@ -3,9 +3,9 @@ import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import axios from 'axios';
-import AppSpinner from './Spinner';
-import { StatusMessage } from '../../shared/interfaces/statusMessage.interface';
-import StatusMessageDialog from './StatusMessage';
+import AppSpinner from '../Spinner/Spinner';
+import { StatusMessage } from '../../../shared/interfaces/statusMessage.interface';
+import StatusMessageDialog from '../StatusMessage/StatusMessage';
 interface DropFile {
     lastModified: number;
     lastModifiedDate: Date;

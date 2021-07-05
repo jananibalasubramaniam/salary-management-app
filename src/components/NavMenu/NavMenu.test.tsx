@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow }  from 'enzyme';
 import './NavMenu';
 import NavMenu from './NavMenu';
-import UploadEmployees from './UploadEmployees';
+import UploadEmployees from '../BulkUploadEmployees/UploadEmployees';
 import MenuIcon from '@material-ui/icons/Menu';
 
 describe('NavMenu', () =>{

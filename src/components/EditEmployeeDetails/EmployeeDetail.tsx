@@ -1,15 +1,15 @@
 import React, { FC, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
-import { Employee } from '../shared/interfaces/employee.interface';
+import { Employee } from '../../shared/interfaces/employee.interface';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
-import AppSpinner from './shared/Spinner';
-import { StatusMessage } from '../shared/interfaces/statusMessage.interface';
-import StatusMessageDialog from './shared/StatusMessage';
+import AppSpinner from '../shared/Spinner/Spinner';
+import { StatusMessage } from '../../shared/interfaces/statusMessage.interface';
+import StatusMessageDialog from '../shared/StatusMessage/StatusMessage';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
