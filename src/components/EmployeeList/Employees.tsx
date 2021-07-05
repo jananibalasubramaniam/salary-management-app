@@ -163,7 +163,7 @@ const Employees  = () => {
             setShowSpinner(true);
             axios.get('http://localhost:3002/employees')
             .then(response =>  {
-                console.log('Retrieved employee details ', response.data);
+                console.log('Retrieved employee details from API', response.data);
                 localStorage.setItem('cachedEmployees', JSON.stringify(response.data));
                 setShowSpinner(false);
                 setEmployees(response.data);

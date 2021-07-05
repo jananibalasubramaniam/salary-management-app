@@ -25,12 +25,10 @@ const AppSpinner: FC<{
 
     const handleClose = () => {
         setOpen(false);
-        console.log('set spinner to false handleclose');
     }
     
     useEffect(() => {
         setOpen(showSpinner);
-        console.log('setSpinner to true in useEffect')
     }, [showSpinner]);
 
     return (

@@ -95,7 +95,6 @@ const UploadEmployees :FC<{
     }
 
     const updateUploadEmployees = () => {
-        console.log('setting uploadEmployees to false');
         setUploadEmployees(false);
     }
     return (
